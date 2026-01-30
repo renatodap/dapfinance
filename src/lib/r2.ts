@@ -12,7 +12,7 @@ function getR2Client(): S3Client {
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
 
   if (!accountId || !accessKeyId || !secretAccessKey) {
-    throw new Error("R2 credentials are not configured");
+    throw new Error("R2_NOT_CONFIGURED");
   }
 
   return new S3Client({

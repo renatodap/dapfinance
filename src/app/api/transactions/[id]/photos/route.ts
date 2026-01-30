@@ -24,38 +24,54 @@ export async function POST(
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Upload to R2 via presigned URL
+    // Try uploading to R2 if configured, otherwise skip storage
     const key = `receipts/${id}/${Date.now()}-${file.name}`;
-    let url: string;
+    let storagePath: string | null = null;
 
     try {
       const { uploadFile } = await import("@/lib/r2");
-      url = await uploadFile(key, buffer, file.type);
-    } catch {
-      console.error("[api/transactions/[id]/photos] R2 upload failed");
-      return NextResponse.json({ error: "File upload failed" }, { status: 500 });
+      storagePath = await uploadFile(key, buffer, file.type);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      if (msg === "R2_NOT_CONFIGURED") {
+        console.warn("[api/transactions/[id]/photos] R2 not configured, skipping upload");
+      } else {
+        console.error("[api/transactions/[id]/photos] R2 upload failed:", msg);
+      }
     }
 
+    // Extract receipt data via AI regardless of R2 status
     let extractedData: Record<string, unknown> | null = null;
     if (extractReceipt) {
       try {
+        // Convert image to base64 data URL for AI processing (works without R2)
+        const base64 = buffer.toString("base64");
+        const dataUrl = `data:${file.type};base64,${base64}`;
         const { extractReceipt: extract } = await import("@/lib/ai");
-        extractedData = (await extract(url)) as unknown as Record<string, unknown>;
+        extractedData = (await extract(dataUrl)) as unknown as Record<string, unknown>;
       } catch {
         console.error("[api/transactions/[id]/photos] Receipt extraction failed");
       }
     }
 
-    const photo = await prisma.transactionPhoto.create({
-      data: {
-        transactionId: id,
-        storagePath: url,
-        extractedData: extractedData ? JSON.parse(JSON.stringify(extractedData)) : undefined,
-        extractionModel: extractReceipt ? "google/gemini-2.0-flash-001" : undefined,
-      },
-    });
+    // Save photo record if we have storage or extracted data
+    if (storagePath || extractedData) {
+      const photo = await prisma.transactionPhoto.create({
+        data: {
+          transactionId: id,
+          storagePath: storagePath ?? `local:${key}`,
+          extractedData: extractedData ? JSON.parse(JSON.stringify(extractedData)) : undefined,
+          extractionModel: extractReceipt ? "google/gemini-2.0-flash-001" : undefined,
+        },
+      });
 
-    return NextResponse.json({ data: photo }, { status: 201 });
+      return NextResponse.json({ data: { photo, extractedData } }, { status: 201 });
+    }
+
+    return NextResponse.json({
+      data: { extractedData },
+      warning: "R2 not configured — image was not stored",
+    });
   } catch (error) {
     console.error("[api/transactions/[id]/photos] POST error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
