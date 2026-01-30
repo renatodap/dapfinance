@@ -18,7 +18,8 @@ export const metadata: Metadata = {
     title: "DAPFinance",
   },
   icons: {
-    apple: "/icons/icon-192x192.png",
+    icon: "/icons/icon-192.svg",
+    apple: "/icons/icon-192.svg",
   },
 };
 
