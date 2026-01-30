@@ -35,7 +35,7 @@ export function PhotoUpload({ transactionId, onUpload }: PhotoUploadProps) {
   function removePhoto(index: number) {
     setPhotos((prev) => {
       const removed = prev[index];
-      URL.revokeObjectURL(removed.preview);
+      if (removed) URL.revokeObjectURL(removed.preview);
       return prev.filter((_, i) => i !== index);
     });
   }

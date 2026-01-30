@@ -8,7 +8,7 @@ const CreateSubscriptionSchema = z.object({
   currency: z.string().default("USD"),
   frequency: z.enum(["monthly", "yearly", "weekly"]),
   category: z.string().optional(),
-  nextBillingDate: z.string().datetime().optional(),
+  billingDay: z.number().int().min(1).max(31).optional(),
 });
 
 export async function GET() {
@@ -34,7 +34,6 @@ export async function POST(request: NextRequest) {
       data: {
         ...data,
         active: true,
-        nextBillingDate: data.nextBillingDate ? new Date(data.nextBillingDate) : null,
       },
     });
 

@@ -34,7 +34,7 @@ function detectBank(headers: string[]): string {
 function parseCSV(text: string): { headers: string[]; rows: Record<string, string>[] } {
   const lines = text.split(/\r?\n/).filter(Boolean);
   if (lines.length < 2) return { headers: [], rows: [] };
-  const headers = lines[0].split(",").map((h) => h.replace(/^"|"$/g, "").trim());
+  const headers = (lines[0] ?? "").split(",").map((h) => h.replace(/^"|"$/g, "").trim());
   const rows = lines.slice(1).map((line) => {
     const values = line.split(",").map((v) => v.replace(/^"|"$/g, "").trim());
     const obj: Record<string, string> = {};

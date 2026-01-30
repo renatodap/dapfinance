@@ -37,13 +37,13 @@ export async function GET() {
       }),
     ]);
 
-    const netWorth = accounts.reduce((sum, a) => sum + a.balance, 0);
-    const subscriptionTotal = subscriptions.reduce((sum, s) => sum + s.amount, 0);
+    const netWorth = accounts.reduce((sum, a) => sum + Number(a.currentBalance ?? 0), 0);
+    const subscriptionTotal = subscriptions.reduce((sum, s) => sum + Number(s.amount), 0);
 
     const spendingByCategory: Record<string, number> = {};
     for (const t of monthlyTransactions) {
       const cat = t.category ?? "uncategorized";
-      spendingByCategory[cat] = (spendingByCategory[cat] ?? 0) + Math.abs(t.amount);
+      spendingByCategory[cat] = (spendingByCategory[cat] ?? 0) + Math.abs(Number(t.amount));
     }
 
     return NextResponse.json({

@@ -6,8 +6,7 @@ const CreateGoalSchema = z.object({
   name: z.string().min(1),
   targetAmount: z.number().positive(),
   currentAmount: z.number().default(0),
-  currency: z.string().default("USD"),
-  deadline: z.string().datetime().optional(),
+  targetDate: z.string().datetime().optional(),
 });
 
 export async function GET() {
@@ -31,7 +30,7 @@ export async function POST(request: NextRequest) {
     const goal = await prisma.goal.create({
       data: {
         ...data,
-        deadline: data.deadline ? new Date(data.deadline) : null,
+        targetDate: data.targetDate ? new Date(data.targetDate) : null,
       },
     });
 

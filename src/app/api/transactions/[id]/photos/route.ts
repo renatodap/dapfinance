@@ -29,8 +29,8 @@ export async function POST(
     let url: string;
 
     try {
-      const { uploadToR2 } = await import("@/lib/r2");
-      url = await uploadToR2(key, buffer, file.type);
+      const { uploadFile } = await import("@/lib/r2");
+      url = await uploadFile(key, buffer, file.type);
     } catch {
       console.error("[api/transactions/[id]/photos] R2 upload failed");
       return NextResponse.json({ error: "File upload failed" }, { status: 500 });
@@ -40,20 +40,18 @@ export async function POST(
     if (extractReceipt) {
       try {
         const { extractReceipt: extract } = await import("@/lib/ai");
-        extractedData = await extract(url);
+        extractedData = (await extract(url)) as unknown as Record<string, unknown>;
       } catch {
         console.error("[api/transactions/[id]/photos] Receipt extraction failed");
       }
     }
 
-    const photo = await prisma.photo.create({
+    const photo = await prisma.transactionPhoto.create({
       data: {
         transactionId: id,
-        url,
-        filename: file.name,
-        mimeType: file.type,
-        size: buffer.length,
-        extractedData: extractedData ? JSON.stringify(extractedData) : null,
+        storagePath: url,
+        extractedData: extractedData ? JSON.parse(JSON.stringify(extractedData)) : undefined,
+        extractionModel: extractReceipt ? "google/gemini-2.0-flash-001" : undefined,
       },
     });
 

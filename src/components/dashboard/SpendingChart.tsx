@@ -26,8 +26,8 @@ function CustomTooltip({ active, payload }: TooltipProps<number, string>) {
   const d = payload[0];
   return (
     <div className="rounded-lg border border-white/10 bg-[#111827]/90 px-3 py-2 text-xs backdrop-blur-xl">
-      <p className="font-medium text-white">{d.name}</p>
-      <p className="text-[#D4A853]">{formatCurrency(d.value ?? 0)}</p>
+      <p className="font-medium text-white">{d?.name}</p>
+      <p className="text-[#D4A853]">{formatCurrency(d?.value ?? 0)}</p>
     </div>
   );
 }
