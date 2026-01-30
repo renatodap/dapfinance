@@ -132,7 +132,7 @@ export default function SubscriptionsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-3 py-4">
+      <div className="space-y-3 pb-4">
         <div className="h-20 animate-pulse rounded-2xl bg-[#111827]/60" />
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="h-16 animate-pulse rounded-xl bg-[#111827]/60" />
@@ -150,7 +150,7 @@ export default function SubscriptionsPage() {
   }
 
   return (
-    <div className="py-4">
+    <div className="pb-4">
       {/* Header */}
       <div className="mb-4 flex items-center justify-between">
         <div>

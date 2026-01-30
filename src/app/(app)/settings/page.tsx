@@ -36,7 +36,7 @@ export default function SettingsPage() {
       variants={stagger}
       initial="hidden"
       animate="show"
-      className="space-y-4 py-4"
+      className="space-y-4 pb-4"
     >
       <motion.h1
         variants={fadeUp}
@@ -77,12 +77,21 @@ export default function SettingsPage() {
         </h2>
         <div className="mt-3 space-y-1">
           {[
-            { label: "Export Data", desc: "Download all your financial data" },
-            { label: "Wise Integration", desc: "Manage webhook connection" },
-            { label: "Categories", desc: "Customize transaction categories" },
+            { label: "Export Data", desc: "Download all your financial data", action: "export" },
+            { label: "Wise Integration", desc: "Manage webhook connection", action: "wise" },
+            { label: "Categories", desc: "Customize transaction categories", action: "categories" },
           ].map((item) => (
             <button
               key={item.label}
+              onClick={() => {
+                if (item.action === "export") {
+                  window.location.href = "/api/export";
+                } else if (item.action === "wise") {
+                  router.push("/settings/wise");
+                } else if (item.action === "categories") {
+                  router.push("/categories");
+                }
+              }}
               className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition-colors hover:bg-white/[0.04]"
             >
               <div>

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Search, Loader2 } from "lucide-react";
 import { TransactionFilters, type FilterState } from "@/components/transactions/TransactionFilters";
 import { TransactionList, type Transaction } from "@/components/transactions/TransactionList";
+import { TransactionDetail } from "@/components/transactions/TransactionDetail";
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -21,6 +22,7 @@ export default function TransactionsPage() {
     dateFrom: "",
     dateTo: "",
   });
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const fetchTransactions = useCallback(
     async (pageNum: number, append = false) => {
@@ -71,11 +73,15 @@ export default function TransactionsPage() {
   }
 
   function handleTransactionClick(tx: Transaction) {
-    void tx; // TODO: implement transaction detail modal
+    setSelectedId(tx.id);
+  }
+
+  function handleTransactionDeleted(id: string) {
+    setTransactions((prev) => prev.filter((t) => t.id !== id));
   }
 
   return (
-    <div className="py-4">
+    <div className="pb-4">
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -132,6 +138,13 @@ export default function TransactionsPage() {
           </>
         )}
       </div>
+
+      <TransactionDetail
+        transactionId={selectedId}
+        open={selectedId !== null}
+        onClose={() => setSelectedId(null)}
+        onDeleted={handleTransactionDeleted}
+      />
     </div>
   );
 }

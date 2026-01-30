@@ -64,3 +64,17 @@ export async function PATCH(
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    await prisma.transaction.delete({ where: { id } });
+    return NextResponse.json({ data: { success: true } });
+  } catch (error) {
+    console.error("[api/transactions/[id]] DELETE error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

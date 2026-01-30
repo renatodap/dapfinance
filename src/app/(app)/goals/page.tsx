@@ -122,7 +122,7 @@ export default function GoalsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4 py-4">
+      <div className="space-y-4 pb-4">
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="h-28 animate-pulse rounded-2xl bg-[#111827]/60" />
         ))}
@@ -139,7 +139,7 @@ export default function GoalsPage() {
   }
 
   return (
-    <div className="py-4">
+    <div className="pb-4">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-lg font-semibold text-white">Goals</h1>
         <button

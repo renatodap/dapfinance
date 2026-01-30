@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Upload, X, Loader2 } from "lucide-react";
+import { Plus, Upload, X, Loader2, Trash2, Pencil } from "lucide-react";
 import AccountsList from "@/components/dashboard/AccountsList";
 
 interface Account {
@@ -60,6 +60,27 @@ export default function AccountsPage() {
     setEditingId(null);
     setForm(emptyForm);
     setDialogOpen(true);
+  }
+
+  function openEdit(account: Account) {
+    setEditingId(account.id);
+    setForm({
+      name: account.name,
+      institution: account.institution,
+      currency: account.currency,
+      currentBalance: String(account.currentBalance),
+    });
+    setDialogOpen(true);
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Delete this account? All associated transactions will also be deleted.")) return;
+    try {
+      await fetch(`/api/accounts/${id}`, { method: "DELETE" });
+      await fetchAccounts();
+    } catch {
+      console.error("[accounts] Delete failed");
+    }
   }
 
   async function handleSave() {
@@ -125,7 +146,7 @@ export default function AccountsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-3 py-4">
+      <div className="space-y-3 pb-4">
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="h-20 animate-pulse rounded-xl bg-[#111827]/60" />
         ))}
@@ -142,7 +163,7 @@ export default function AccountsPage() {
   }
 
   return (
-    <div className="py-4">
+    <div className="pb-4">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-lg font-semibold text-white">Accounts</h1>
         <button
@@ -154,7 +175,36 @@ export default function AccountsPage() {
         </button>
       </div>
 
-      <AccountsList accounts={accounts} onUpdate={handleQuickUpdate} />
+      <div className="space-y-3">
+        {accounts.map((account) => (
+          <div
+            key={account.id}
+            className="flex items-center justify-between rounded-xl border border-white/5 bg-[#111827]/60 p-4 backdrop-blur-xl"
+          >
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-white">{account.name}</p>
+              <p className="text-xs text-[#6B7280]">{account.institution}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-bold text-[#D4A853]">
+                {new Intl.NumberFormat("en-US", { style: "currency", currency: account.currency || "USD" }).format(account.currentBalance)}
+              </p>
+              <button
+                onClick={() => openEdit(account)}
+                className="rounded-lg p-1.5 text-[#6B7280] hover:bg-white/5 hover:text-white"
+              >
+                <Pencil className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => handleDelete(account.id)}
+                className="rounded-lg p-1.5 text-[#6B7280] hover:bg-red-500/10 hover:text-red-400"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* CSV Import */}
       <motion.div

@@ -8,7 +8,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <main
         className="mx-auto max-w-lg overflow-y-auto px-4"
         style={{
-          paddingTop: "calc(56px + env(safe-area-inset-top, 0px))",
+          paddingTop: "calc(72px + env(safe-area-inset-top, 0px))",
           paddingBottom: "calc(60px + env(safe-area-inset-bottom, 0px))",
         }}
       >

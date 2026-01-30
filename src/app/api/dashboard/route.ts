@@ -68,6 +68,11 @@ export async function GET() {
       color: CATEGORY_COLORS[name] ?? "#6B7280",
     }));
 
+    // Calculate change from previous month's snapshot
+    const previousNetWorth = snapshots.length > 0 ? Number(snapshots[0].totalUsd ?? 0) : 0;
+    const change = previousNetWorth > 0 ? netWorthAmount - previousNetWorth : 0;
+    const changePercent = previousNetWorth > 0 ? (change / previousNetWorth) * 100 : 0;
+
     // Build sparkline from snapshots
     const sparklineData = snapshots
       .reverse()
@@ -77,8 +82,8 @@ export async function GET() {
       data: {
         netWorth: {
           amount: netWorthAmount,
-          change: 0,
-          changePercent: 0,
+          change,
+          changePercent,
           sparklineData,
         },
         pendingCount,

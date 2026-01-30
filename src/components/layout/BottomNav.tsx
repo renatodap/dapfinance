@@ -9,7 +9,6 @@ import {
   Wallet,
   Settings,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const tabs = [
@@ -46,11 +45,7 @@ export default function BottomNav() {
               )}
             >
               {isActive && (
-                <motion.span
-                  layoutId="bottomNavIndicator"
-                  className="absolute inset-0 rounded-xl bg-[#D4A853]/10"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                />
+                <span className="absolute inset-0 rounded-xl bg-[#D4A853]/10" />
               )}
               <Icon
                 className={cn(

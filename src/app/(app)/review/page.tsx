@@ -101,7 +101,7 @@ export default function ReviewPage() {
 
   if (loading) {
     return (
-      <div className="space-y-3 py-4">
+      <div className="space-y-3 pb-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
@@ -175,7 +175,7 @@ export default function ReviewPage() {
   }
 
   return (
-    <div className="py-4">
+    <div className="pb-4">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-lg font-semibold text-white">Review Queue</h1>
         <span className="rounded-full bg-[#2DD4BF] px-2.5 py-0.5 text-xs font-bold text-[#0A0E1A]">

@@ -83,7 +83,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4 py-4">
+      <div className="space-y-4 pb-4">
         <Skeleton className="h-40" />
         <Skeleton className="h-16" />
         <Skeleton className="h-56" />
@@ -109,7 +109,7 @@ export default function DashboardPage() {
       variants={stagger}
       initial="hidden"
       animate="show"
-      className="space-y-4 py-4"
+      className="space-y-4 pb-4"
     >
       <motion.div variants={fadeUp}>
         <NetWorthCard
