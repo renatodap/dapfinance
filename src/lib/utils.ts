@@ -6,12 +6,19 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(amount: number, currency = "USD"): string {
-  return new Intl.NumberFormat("en-US", {
+  const formatted = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);
+
+  // For non-USD currencies, append ISO code to avoid symbol ambiguity
+  // e.g. "R$1,234.56 BRL" instead of just "R$1,234.56"
+  if (currency !== "USD") {
+    return `${formatted} ${currency}`;
+  }
+  return formatted;
 }
 
 export function formatDate(dateStr: string): string {

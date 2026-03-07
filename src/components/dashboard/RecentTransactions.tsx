@@ -11,6 +11,7 @@ interface Transaction {
   merchant: string | null;
   amount: number;
   tx_type: string;
+  currency: string;
   category_name: string | null;
 }
 
@@ -51,7 +52,7 @@ export default function RecentTransactions({ transactions }: { transactions: Tra
               }`}
             >
               {tx.tx_type === "income" ? "+" : "-"}
-              {formatCurrency(Math.abs(tx.amount))}
+              {formatCurrency(Math.abs(tx.amount), tx.currency)}
             </span>
           </div>
         ))}

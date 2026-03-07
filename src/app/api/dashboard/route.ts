@@ -19,7 +19,7 @@ export async function GET() {
         .order("sort_order"),
       supabase
         .from("finance_transactions")
-        .select("id, transaction_date, description, merchant, amount, tx_type, category_id, finance_categories(name, icon)")
+        .select("id, transaction_date, description, merchant, amount, tx_type, category_id, account_id, finance_categories(name, icon), finance_accounts!inner(currency)")
         .eq("user_id", USER_ID)
         .order("transaction_date", { ascending: false })
         .limit(15),
@@ -79,6 +79,7 @@ export async function GET() {
       transactions: transactions.map((t) => ({
         ...t,
         amount: Number(t.amount),
+        currency: (t as any).finance_accounts?.currency || "USD",
         category_name: (t as any).finance_categories?.name || null,
         category_icon: (t as any).finance_categories?.icon || null,
       })),

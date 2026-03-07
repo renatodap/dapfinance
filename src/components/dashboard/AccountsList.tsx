@@ -58,11 +58,8 @@ export default function AccountsList({ accounts, onUpdate }: AccountsListProps) 
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-bold text-[#D4A853]">
-                {formatCurrency(account.currentBalance)}
+                {formatCurrency(account.currentBalance, account.currency)}
               </p>
-              <span className="rounded-full bg-[#1A1F2E] px-1.5 py-0.5 text-[10px] font-medium text-[#9CA3AF]">
-                {account.currency}
-              </span>
             </div>
 
             {onUpdate && (

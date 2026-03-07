@@ -77,7 +77,7 @@ export default function DashboardPage() {
         className="rounded-2xl border border-[#D4A853]/10 bg-[#111827]/60 p-5 backdrop-blur-xl"
       >
         <p className="text-xs font-medium uppercase tracking-wider text-[#9CA3AF]">
-          Total Balance (est.)
+          Total Balance <span className="normal-case tracking-normal text-[#6B7280]">≈ USD</span>
         </p>
         <p className="mt-1 bg-gradient-to-r from-[#D4A853] via-[#E8C97A] to-[#D4A853] bg-clip-text text-4xl font-bold text-transparent">
           {formatCurrency(data.totalUsd)}
