@@ -2,21 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import {
-  LayoutDashboard,
-  CheckCircle2,
-  ArrowUpDown,
-  Wallet,
-  Settings,
-} from "lucide-react";
+import { LayoutDashboard, ArrowUpDown, PieChart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
   { href: "/", icon: LayoutDashboard, label: "Home" },
-  { href: "/review", icon: CheckCircle2, label: "Review" },
   { href: "/transactions", icon: ArrowUpDown, label: "Activity" },
-  { href: "/accounts", icon: Wallet, label: "Accounts" },
-  { href: "/settings", icon: Settings, label: "Settings" },
+  { href: "/budget", icon: PieChart, label: "Budget" },
 ];
 
 export default function BottomNav() {
