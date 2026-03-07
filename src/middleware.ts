@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   }
 
   const auth = request.cookies.get("dapfinance-auth");
-  if (auth?.value !== process.env.APP_PASSWORD) {
+  if (auth?.value !== "authenticated") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
